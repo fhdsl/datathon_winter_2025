@@ -1,0 +1,61 @@
+name,label,concept
+B11005_001,Estimate!!Total:,Households by Presence of People Under 18 Years by Household Type
+B11005_002,Estimate!!Total:!!Households with one or more people under 18 years:,Households by Presence of People Under 18 Years by Household Type
+B11005_005,Estimate!!Total:!!Households with one or more people under 18 years:!!Family households:!!Other family:,Households by Presence of People Under 18 Years by Household Type
+B15003_001,Estimate!!Total:,Educational Attainment for the Population 25 Years and Over
+B15003_002,Estimate!!Total:!!No schooling completed,Educational Attainment for the Population 25 Years and Over
+B15003_003,Estimate!!Total:!!Nursery school,Educational Attainment for the Population 25 Years and Over
+B15003_004,Estimate!!Total:!!Kindergarten,Educational Attainment for the Population 25 Years and Over
+B15003_005,Estimate!!Total:!!1st grade,Educational Attainment for the Population 25 Years and Over
+B15003_006,Estimate!!Total:!!2nd grade,Educational Attainment for the Population 25 Years and Over
+B15003_007,Estimate!!Total:!!3rd grade,Educational Attainment for the Population 25 Years and Over
+B15003_008,Estimate!!Total:!!4th grade,Educational Attainment for the Population 25 Years and Over
+B15003_009,Estimate!!Total:!!5th grade,Educational Attainment for the Population 25 Years and Over
+B15003_010,Estimate!!Total:!!6th grade,Educational Attainment for the Population 25 Years and Over
+B15003_011,Estimate!!Total:!!7th grade,Educational Attainment for the Population 25 Years and Over
+B15003_012,Estimate!!Total:!!8th grade,Educational Attainment for the Population 25 Years and Over
+B15003_017,Estimate!!Total:!!Regular high school diploma,Educational Attainment for the Population 25 Years and Over
+B15003_018,Estimate!!Total:!!GED or alternative credential,Educational Attainment for the Population 25 Years and Over
+B15003_019,"Estimate!!Total:!!Some college, less than 1 year",Educational Attainment for the Population 25 Years and Over
+B15003_020,"Estimate!!Total:!!Some college, 1 or more years, no degree",Educational Attainment for the Population 25 Years and Over
+B15003_021,Estimate!!Total:!!Associate's degree,Educational Attainment for the Population 25 Years and Over
+B15003_022,Estimate!!Total:!!Bachelor's degree,Educational Attainment for the Population 25 Years and Over
+B15003_023,Estimate!!Total:!!Master's degree,Educational Attainment for the Population 25 Years and Over
+B15003_024,Estimate!!Total:!!Professional school degree,Educational Attainment for the Population 25 Years and Over
+B15003_025,Estimate!!Total:!!Doctorate degree,Educational Attainment for the Population 25 Years and Over
+B17010_001,Estimate!!Total:,Poverty Status in the Past 12 Months of Families by Family Type by Presence of Related Children Under 18 Years by Age of Related Children
+B17010_002,Estimate!!Total:!!Income in the past 12 months below poverty level:,Poverty Status in the Past 12 Months of Families by Family Type by Presence of Related Children Under 18 Years by Age of Related Children
+B19001_002,"Estimate!!Total:!!Less than $10,000",Household Income in the Past 12 Months (in 2023 Inflation-Adjusted Dollars)
+B19001_011,"Estimate!!Total:!!$50,000 to $59,999",Household Income in the Past 12 Months (in 2023 Inflation-Adjusted Dollars)
+B19001_012,"Estimate!!Total:!!$60,000 to $74,999",Household Income in the Past 12 Months (in 2023 Inflation-Adjusted Dollars)
+B19001_013,"Estimate!!Total:!!$75,000 to $99,999",Household Income in the Past 12 Months (in 2023 Inflation-Adjusted Dollars)
+B19001_014,"Estimate!!Total:!!$100,000 to $124,999",Household Income in the Past 12 Months (in 2023 Inflation-Adjusted Dollars)
+B19001_015,"Estimate!!Total:!!$125,000 to $149,999",Household Income in the Past 12 Months (in 2023 Inflation-Adjusted Dollars)
+B19001_016,"Estimate!!Total:!!$150,000 to $199,999",Household Income in the Past 12 Months (in 2023 Inflation-Adjusted Dollars)
+B19001_017,"Estimate!!Total:!!$200,000 or more",Household Income in the Past 12 Months (in 2023 Inflation-Adjusted Dollars)
+B19113_001,Estimate!!Median family income in the past 12 months (in 2023 inflation-adjusted dollars),Median Family Income in the Past 12 Months (in 2023 Inflation-Adjusted Dollars)
+B23025_003,Estimate!!Total:!!In labor force:!!Civilian labor force:,Employment Status for the Population 16 Years and Over
+B23025_005,Estimate!!Total:!!In labor force:!!Civilian labor force:!!Unemployed,Employment Status for the Population 16 Years and Over
+B25003_001,Estimate!!Total:,Tenure
+B25003_002,Estimate!!Total:!!Owner occupied,Tenure
+B25014_001,Estimate!!Total:,Tenure by Occupants per Room
+B25014_005,Estimate!!Total:!!Owner occupied:!!1.01 to 1.50 occupants per room,Tenure by Occupants per Room
+B25014_006,Estimate!!Total:!!Owner occupied:!!1.51 to 2.00 occupants per room,Tenure by Occupants per Room
+B25014_007,Estimate!!Total:!!Owner occupied:!!2.01 or more occupants per room,Tenure by Occupants per Room
+B25014_011,Estimate!!Total:!!Renter occupied:!!1.01 to 1.50 occupants per room,Tenure by Occupants per Room
+B25014_012,Estimate!!Total:!!Renter occupied:!!1.51 to 2.00 occupants per room,Tenure by Occupants per Room
+B25014_013,Estimate!!Total:!!Renter occupied:!!2.01 or more occupants per room,Tenure by Occupants per Room
+B25044_001,Estimate!!Total:,Tenure by Vehicles Available
+B25044_003,Estimate!!Total:!!Owner occupied:!!No vehicle available,Tenure by Vehicles Available
+B25044_010,Estimate!!Total:!!Renter occupied:!!No vehicle available,Tenure by Vehicles Available
+B25064_001,Estimate!!Median gross rent,Median Gross Rent (Dollars)
+B25077_001,Estimate!!Median value (dollars),Median Value (Dollars)
+B25088_002,Estimate!!Median selected monthly owner costs (dollars) --!!Housing units with a mortgage (dollars),Median Selected Monthly Owner Costs (Dollars) by Mortgage Status
+C17002_001,Estimate!!Total:,Ratio of Income to Poverty Level in the Past 12 Months
+C17002_002,Estimate!!Total:!!Under .50,Ratio of Income to Poverty Level in the Past 12 Months
+C17002_003,Estimate!!Total:!!.50 to .99,Ratio of Income to Poverty Level in the Past 12 Months
+C17002_004,Estimate!!Total:!!1.00 to 1.24,Ratio of Income to Poverty Level in the Past 12 Months
+C17002_005,Estimate!!Total:!!1.25 to 1.49,Ratio of Income to Poverty Level in the Past 12 Months
+C24010_001,Estimate!!Total:,Sex by Occupation for the Civilian Employed Population 16 Years and Over
+C24010_003,"Estimate!!Total:!!Male:!!Management, business, science, and arts occupations:",Sex by Occupation for the Civilian Employed Population 16 Years and Over
+C24010_039,"Estimate!!Total:!!Female:!!Management, business, science, and arts occupations:",Sex by Occupation for the Civilian Employed Population 16 Years and Over
