@@ -3,47 +3,6 @@ title: "datathon_winter_2025"
 ---
 
 
-B06012PR_002
-Estimate!!Total:!!Below 100 percent of the poverty level
-Place of Birth by Poverty Status in the Past 12 Months in Puerto Rico
-2473
-B06012PR_003
-Estimate!!Total:!!100 to 149 percent of the poverty level
-Place of Birth by Poverty Status in the Past 12 Months in Puerto Rico
-2474
-B06012PR_004
-Estimate!!Total:!!At or above 150 percent of the poverty level
-Place of Birth by Poverty Status in the Past 12 Months in 
-
-B06012PR_017
-Estimate!!Total:!!Foreign born:
-Place of Birth by Poverty Status in the Past 12 Months in Puerto Rico
-2488
-B06012PR_018
-Estimate!!Total:!!Foreign born:!!Below 100 percent of the poverty level
-Place of Birth by Poverty Status in the Past 12 Months in Puerto Rico
-2489
-B06012PR_019
-Estimate!!Total:!!Foreign born:!!100 to 149 percent of the poverty level
-Place of Birth by Poverty Status in the Past 12 Months in Puerto Rico
-2490
-B06012PR_020
-Estimate!!Total:!!Foreign born:!!At or above 150 percent of the poverty level
-
-B06012_001
-Estimate!!Total:
-Place of Birth by Poverty Status in the Past 12 Months in the United States
-2492
-B06012_002
-Estimate!!Total:!!Below 100 percent of the poverty level
-Place of Birth by Poverty Status in the Past 12 Months in the United States
-2493
-B06012_003
-Estimate!!Total:!!100 to 149 percent of the poverty level
-Place of Birth by Poverty Status in the Past 12 Months in the United States
-2494
-B06012_004
-Estimate!!Total:!!At or above 150 percent of the poverty level
 
 ```{r}
 library(tidycensus)
@@ -55,25 +14,23 @@ acs_vars <- load_variables(2023, "acs1", cache = TRUE)
 ```{r}
 library(sociome)
 
-raw_data <- get_adi(raw_data_only =
+raw_data_2023 <- get_adi(raw_data_only =
              TRUE, geography="county", year=2023)
-adi_data <- calculate_adi(raw_data)
-
-raw_data_2023 <- raw_data
-
+adi_data_2023 <- calculate_adi(raw_data_2023)
 ```
 
 ```{r}
 raw_data_2022 <- get_adi(raw_data_only =
              TRUE, geography="county", year=2022)
-adi_data_2022 <- calculate_adi(raw_data)
+adi_data_2022 <- calculate_adi(raw_data_2022)
 
 ```
 
 
 ```{r}
+library(tidyverse)
 data_dict <- acs_vars |>
-  filter(name %in% colnames(raw_data))
+  filter(name %in% colnames(raw_data_2022))
 
 data_dict
 
@@ -82,7 +39,7 @@ write_csv(data_dict, "raw_data_dictionary.csv")
 
 ```{r}
 library(tidyverse)
-write_csv(adi_data, "area_deprivation_index_2023.csv")
+write_csv(adi_data_2023, "area_deprivation_index_2023.csv")
 write_csv(adi_data_2022, "area_deprivation_index_2022.csv")
 ```
 
@@ -105,7 +62,9 @@ water_insecurity_2023 <- water_insecurity_2023 |>
     } )
   )
 ```
-
+```{r}
+water_insecurity_2022
+```
 
 ```{r}
 merged <- water_insecurity_2022 |>
@@ -118,6 +77,8 @@ fulldata <- bind_rows(merged, merged2) |>
   janitor::clean_names()
 
 write_csv(fulldata, "adi-water-insecurity-all.csv")
+
+fulldata
 ```
 
 
