@@ -7,7 +7,16 @@ website:
     left:
       - href: index.qmd
         text: Home
-      - about.qmd
+      - href: about.qmd
+        text: About the Data
+      - href: mapview.qmd
+        text: R Mapview
+      - href: python-spatial.qmd
+        text: Python
+      - href: datasette.qmd
+        text: SQL interface
+      - href: questions.qmd
+        text: Research Questions
 
 format:
   html:

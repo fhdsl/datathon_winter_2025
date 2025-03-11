@@ -1,0 +1,34 @@
+---
+title: "Using Mapview"
+---
+
+```{r}
+library(mapview)
+library(leaflet)
+library(plainview)
+library(leafsync)
+library(tidyverse)
+load("water_insecurity.rdata")
+mapview(fulldata)
+
+wa_counties <- fulldata |>
+  dplyr::filter(state == "Washington") |>
+  dplyr::filter(year == 2022)
+```
+
+
+We can visualize two variables as different layers by adding them together. Try clicking on the different layers (use the layer button in the top left).
+
+```{r}
+m1 <- mapview(wa_counties, zcol=c("adi")) 
+m2 <- mapview(wa_counties, zcol=c("percent_lacking_plumbing"))
+
+m1 + m2
+```
+
+Or we can sync two maps:
+
+```{r}
+sync(m1, m2)
+
+```

@@ -1,162 +1,32 @@
 ---
-title: "datathon_winter_2025"
+title: "Datathon Winter 2025"
 ---
 
+Welcome to the winter datathon!
 
+We are looking looking at two sources of data:
 
-```{r}
-library(tidycensus)
+- Water availability by household
+- Area Deprivation Index
 
-acs_vars <- load_variables(2023, "acs1", cache = TRUE)
-```
+Both of these measures are measured at the County level.
 
+We will do some simple spatial data exploration and explore these datasets.
 
-```{r}
-library(sociome)
+## Area Deprivation Index
 
-raw_data_2023 <- get_adi(raw_data_only =
-             TRUE, geography="county", year=2023)
-adi_data_2023 <- calculate_adi(raw_data_2023)
-```
+The Area Deprivation Index is a measure of Social Determinants of Health (SDoH) that determine a region's access. In short, it summarizes three key factors in their calculation:
 
-```{r}
-raw_data_2022 <- get_adi(raw_data_only =
-             TRUE, geography="county", year=2022)
-adi_data_2022 <- calculate_adi(raw_data_2022)
+- Financial Strength
+- Economic Hardship and Inequality
+- Educational Attainment
 
-```
+We are able to access the raw data and 
 
-
-```{r}
-library(tidyverse)
-data_dict <- acs_vars |>
-  filter(name %in% colnames(raw_data_2022))
-
-data_dict
-
-write_csv(data_dict, "raw_data_dictionary.csv")
-```
-
-```{r}
-library(tidyverse)
-write_csv(adi_data_2023, "area_deprivation_index_2023.csv")
-write_csv(adi_data_2022, "area_deprivation_index_2022.csv")
-```
-
-
-```{r}
-water_insecurity_2022 <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2025/2025-01-28/water_insecurity_2022.csv')
-water_insecurity_2023 <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2025/2025-01-28/water_insecurity_2023.csv')
-
-# The geometry columns are saved as text with the code to reproduce them.
-water_insecurity_2022 <- water_insecurity_2022 |> 
-  dplyr::mutate(
-    geometry = purrr::map(geometry, \(geo) {
-      eval(parse(text = geo))
-    } )
-  )
-water_insecurity_2023 <- water_insecurity_2023 |> 
-  dplyr::mutate(
-    geometry = purrr::map(geometry, \(geo) {
-      eval(parse(text = geo))
-    } )
-  )
-```
-
-```{r}
-library(tidycensus)
-library(sf) 
-library(janitor) 
-library(tidyverse)
-
-# Helper functions -----
-get_census_data <- function(geography, var_names, year, proj, survey_var) {
-  df <- get_acs(
-    geography = geography,
-    variable = var_names,
-    year = year,
-    geometry = TRUE,
-    survey = survey_var) |>
-    clean_names() |>
-    st_transform(proj) |>
-    mutate(year = year)
-  
-  return(df) 
-}
-
-# Grab relevant variables - B01003_001: total population, B25049_004: households lacking plumbing----
-vars <- c("B01003_001", "B25049_004")
-
-# Pull data for 2023 and 2022 for all US counties ------
-water_insecurity_2023 <- get_census_data(
-  geography = 'county', 
-  var_names = vars, 
-  year = "2023", 
-  proj = "EPSG:5070", 
-  survey_var = "acs1"
-) |>
-  mutate(
-    variable_long = case_when(
-      variable == "B01003_001" ~ "total_pop",
-      variable == "B25049_004" ~ "plumbing",
-      .default = NA_character_  
-    )
-  ) |> 
-  select(geoid, name, variable_long, estimate, geometry, year) |> 
-  pivot_wider(
-    names_from = variable_long,
-    values_from = estimate
-  ) |> 
-  mutate(
-    percent_lacking_plumbing = (plumbing / total_pop) * 100
-  )
-
-water_insecurity_2022 <- get_census_data(
-  geography = 'county', 
-  var_names = vars, 
-  year = "2022", 
-  proj = "EPSG:5070", 
-  survey_var = "acs1"
-) |>
-  mutate(
-    variable_long = case_when(
-      variable == "B01003_001" ~ "total_pop",
-      variable == "B25049_004" ~ "plumbing",
-      .default = NA_character_  
-    )
-  ) |> 
-  select(geoid, name, variable_long, estimate, geometry, year) |> 
-  pivot_wider(
-    names_from = variable_long,
-    values_from = estimate
-  ) |> 
-  mutate(
-    percent_lacking_plumbing = (plumbing / total_pop) * 100
-  )
-```
-
-```{r}
-water_insecurity_2022
-```
-
-```{r}
-merged <- water_insecurity_2022 |>
-  inner_join(y=adi_data_2022, by=c(geoid="GEOID"))
-merged2 <- water_insecurity_2023 |>
-  inner_join(y=adi_data, by=c(geoid="GEOID"))
-
-fulldata <- bind_rows(merged, merged2) |>
-  separate("name", into=c("county", "state"), sep = ",") |>
-  janitor::clean_names()
-
-write_csv(fulldata, "adi-water-insecurity-all.csv")
-
-fulldata
-```
+## Why are Social Determinants of Health Important?
 
 
 
+## Availability of Plumbing
 
-```{r}
-save(raw_data_2023, raw_data_2022, water_insecurity_2022, water_insecurity_2023, fulldata, file="water_insecurity.rdata")
-```
+One of the 

@@ -1,9 +1,138 @@
 ---
-title: "About"
+title: "Information about the Data"
+format:
+  html:
+    df-print: paged
 ---
 
-About this site
+This data was first shown in Tidy Tuesday: 
+
+More interesting reading:
+
+- [Mapping water insecureity in R with tidycensus](https://waterdata.usgs.gov/blog/acs-maps/) - the original blog post from which this data was derived.
+- [Unequal Access to Water: How societal factors shape vulnerability to water security](https://labs.waterdata.usgs.gov/visualizations/vulnerability-indicators/index.html#/en)
+- [Social Vulnerability and Water Security in the Western United States](https://agupubs.onlinelibrary.wiley.com/doi/epdf/10.1029/2023WR036284)
+- [sociome: Operationalizing Social Determinants of Health Data for Researchers](https://github.com/ClevelandClinicQHS/sociome) - package which calculates various indices
+
+## Where the Data Comes From
+
+- All data is derived from the [American Community Survey (ACS)](https://www.census.gov/programs-surveys/acs), a dataset that is provided by the U.S. Census. 
+
+> The American Community Survey (ACS) helps local officials, community leaders, and businesses understand the changes taking place in their communities. It is the premier source for detailed population and housing information about our nation.
+
+## Water Insecurity Background
+
+> Marginalized populations are often disproportionately affected by water insecurity. Communities of color and individuals living below the poverty line are frequently the hardest hit by water-related hazards
+
+> Researchers in the USGS Social and Economic Drivers program [identified factors of social vulnerability associated with conditions of water insecurity](https://www.usgs.gov/data/literature-summary-indicators-water-vulnerability-western-us-2000-2022).
+
+> The team found that a small subset of social vulnerability factors was well studied and was consistently associated with water insecurity. These factors included multiple demographic characteristics:
+
+- age
+- race/ethnicity
+- family structure 
+- gender 
+- language proficiency), 
+- dependence on specific sources and uses of water, 
+- wealth
+- exposure to water-related hazards.
+
+> Low income and impoverished persons are more likely to experience conditions associated with water insecurity.
 
 ```{r}
-1 + 1
+#| message: false
+#| warning: false
+#| echo: false
+library(tidyverse)
+library(sf)
+load("water_insecurity.rdata")
+```
+
+## ADI (Area Deprivation Index)
+
+> "The Area Deprivation Index (ADI) is based on a measure created by the Health Resources & Services Administration (HRSA) over two decades ago for primarily county-level use, but refined, adapted, and validated to the Census block group/neighborhood level by Amy Kind, MD, PhD and her research team at the University of Wisconsin-Madison. It allows for rankings of neighborhoods by socioeconomic status disadvantage in a region of interest (e.g. at the state or national level)."
+> <div style="text-align: right"> https://www.neighborhoodatlas.medicine.wisc.edu </div>
+
+- [More information how the index is calculated](https://www.neighborhoodatlas.medicine.wisc.edu/)
+- [ADI is the Most Scientifically Validated Social Exposome Tool](https://www.healthaffairs.org/content/forefront/area-deprivation-index-most-scientifically-validated-social-exposome-tool-available)
+
+```{r}
+fulldata |>
+  ggplot() +
+  aes(x=adi) +
+  geom_histogram()
+```
+
+This is one set of fits from a paper, to understand the overall contributions of each to the ADI model:
+
+|Census Block Group Components|Factor Score Coefficients|
+|-----------------------------|-------------------------|
+|Percent of the block group’s population aged ≥ 25 years with < 9 years of education|	0.0849|
+|Percent aged ≥ 25 years with greater than or equal to a high school diploma|	−0.0970|
+|Percent of employed persons ≥16 years of age in white-collar occupations|	−0.0874|
+|Median family income|	−0.0977|
+|Income disparity|	0.0936|
+|Median home value|	−0.0688|
+|Median gross rent|	−0.0781|
+|Median monthly mortgage|	−0.0770|
+|Percent owner-occupied housing units (home ownership rate)|	−0.0615|
+|Percent of civilian labor force population ≥ 16 years of age unemployed (unemployment rate)	|0.0806|
+|Percent of families below the poverty level|0.0977|
+|Percent of population below 150% of the poverty threshold|0.1037|
+|Percent of single-parent households with children < 18 years of age|0.0719|
+|Percent of occupied housing units without a motor vehicle|0.0694|
+|Percent of occupied housing units without a telephone|0.0877|
+|Percent of occupied housing units without complete plumbing (log)|0.0510|
+|Percent of occupied housing units with more than one person per room (crowding)|0.0556|
+
+
+## Merged Data
+
+```{r}
+fulldata |>
+  dplyr::filter(year==2022) |>
+  ggplot() +
+  aes(x=percent_lacking_plumbing, y=adi) +
+  geom_point()
+```
+
+## Raw Data from ADI calculations
+
+This is the county level data that is used to calculate the Area Deprivation Index. Here is a list of the covariates used to derive the ADI:
+
+```{r}
+#data_dict <- 
+```
+
+## Histogram of percent lacking plumbing
+
+There are only a few counties that have large percentages of households lacking plumbing:
+
+```{r}
+library(tidyverse)
+
+fulldata |>
+  ggplot() +
+  aes(x=percent_lacking_plumbing) +
+  geom_histogram(fill="blue")
+```
+
+Zooming in on these counties:
+
+```{r}
+fulldata |>
+  ggplot() +
+  aes(x=percent_lacking_plumbing) +
+  geom_histogram(fill="blue") + 
+  xlim(1,5)
+```
+
+## Raw Data Used in Calculations
+
+This is the list of covariates that was used to calculate the ADI:
+
+```{r}
+read_csv("raw_data_dictionary.csv") |>
+  dplyr::select(name, concept)
+
 ```

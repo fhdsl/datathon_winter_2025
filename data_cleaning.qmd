@@ -1,0 +1,278 @@
+---
+title: "datathon_winter_2025"
+---
+
+
+
+```{r}
+library(tidycensus)
+
+acs_vars <- load_variables(2023, "acs1", cache = TRUE)
+```
+
+
+```{r}
+library(sociome)
+
+raw_data_2023 <- get_adi(raw_data_only =
+             TRUE, geography="county", year=2023)
+adi_data_2023 <- calculate_adi(raw_data_2023)
+```
+
+```{r}
+raw_data_2022 <- get_adi(raw_data_only =
+             TRUE, geography="county", year=2022)
+adi_data_2022 <- calculate_adi(raw_data_2022)
+
+```
+
+
+```{r}
+library(tidyverse)
+data_dict <- acs_vars |>
+  filter(name %in% colnames(raw_data_2022))
+
+data_dict
+
+write_csv(data_dict, "raw_data_dictionary.csv")
+```
+
+```{r}
+library(tidyverse)
+write_csv(adi_data_2023, "area_deprivation_index_2023.csv")
+write_csv(adi_data_2022, "area_deprivation_index_2022.csv")
+```
+
+
+```{r}
+water_insecurity_2022 <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2025/2025-01-28/water_insecurity_2022.csv')
+water_insecurity_2023 <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2025/2025-01-28/water_insecurity_2023.csv')
+
+# The geometry columns are saved as text with the code to reproduce them.
+water_insecurity_2022 <- water_insecurity_2022 |> 
+  dplyr::mutate(
+    geometry = purrr::map(geometry, \(geo) {
+      eval(parse(text = geo))
+    } )
+  )
+water_insecurity_2023 <- water_insecurity_2023 |> 
+  dplyr::mutate(
+    geometry = purrr::map(geometry, \(geo) {
+      eval(parse(text = geo))
+    } )
+  )
+```
+
+```{r}
+library(tidycensus)
+library(sf) 
+library(janitor) 
+library(tidyverse)
+
+# Helper functions -----
+get_census_data <- function(geography, var_names, year, proj, survey_var) {
+  df <- get_acs(
+    geography = geography,
+    variable = var_names,
+    year = year,
+    geometry = TRUE,
+    survey = survey_var) |>
+    clean_names() |>
+    st_transform(proj) |>
+    mutate(year = year)
+  
+  return(df) 
+}
+
+# Grab relevant variables - B01003_001: total population, B25049_004: households lacking plumbing----
+vars <- c("B01003_001", "B25049_004")
+
+western_states <- c('Washington', 'Oregon', 'California', 'Idaho', 'Nevada',
+               'Utah', 'Arizona', 'Montana', 'Wyoming', 'Colorado',
+               'New Mexico', 'North Dakota', 'South Dakota', 'Nebraska', 'Kansas',
+               'Oklahoma', 'Texas', 'Minnesota', 'Iowa', 'Missouri',
+               'Arkansas', 'Louisiana')
+
+# Pull data for 2023 and 2022 for all US counties ------
+water_insecurity_2023 <- get_census_data(
+  geography = 'county', 
+  var_names = vars, 
+  year = "2023", 
+  proj = "EPSG:5070", 
+  survey_var = "acs1"
+) |>
+  mutate(
+    variable_long = case_when(
+      variable == "B01003_001" ~ "total_pop",
+      variable == "B25049_004" ~ "plumbing",
+      .default = NA_character_  
+    )
+  ) |> 
+  select(geoid, name, variable_long, estimate, geometry, year) |> 
+  pivot_wider(
+    names_from = variable_long,
+    values_from = estimate
+  ) |> 
+  mutate(
+    percent_lacking_plumbing = (plumbing / total_pop) * 100
+  ) |>
+  separate("name", into=c("county", "state"), sep = ", ") |>
+  mutate(state= str_trim(state)) |>
+ filter(state %in% western_states)
+
+water_insecurity_2022 <- get_census_data(
+  geography = 'county', 
+  var_names = vars, 
+  year = "2022", 
+  proj = "EPSG:5070", 
+  survey_var = "acs1"
+) |>
+  mutate(
+    variable_long = case_when(
+      variable == "B01003_001" ~ "total_pop",
+      variable == "B25049_004" ~ "plumbing",
+      .default = NA_character_  
+    )
+  ) |> 
+  select(geoid, name, variable_long, estimate, geometry, year) |> 
+  pivot_wider(
+    names_from = variable_long,
+    values_from = estimate
+  ) |> 
+  mutate(
+    percent_lacking_plumbing = (plumbing / total_pop) * 100
+  ) |>
+  separate("name", into=c("county", "state"), sep = ", ") |>
+  mutate(state= str_trim(state)) |>
+ filter(state %in% western_states)
+```
+
+```{r}
+water_insecurity_2022
+```
+
+```{r}
+
+
+merged <- water_insecurity_2022 |>
+  inner_join(y=adi_data_2022, by=c(geoid="GEOID"))
+merged2 <- water_insecurity_2023 |>
+  inner_join(y=adi_data_2023, by=c(geoid="GEOID"))
+
+fulldata <- bind_rows(merged, merged2) |>
+  janitor::clean_names() 
+
+write_csv(fulldata, "adi-water-insecurity-all.csv")
+
+fulldata
+```
+
+```{r}
+library(tigris) # For downloading and using cartographic boundary shapefiles 
+library(rmapshaper) # For simplifing spatial objects
+library(showtext) # For adding custom fonts
+library(scico) # For adding color palettes
+
+western_states <- c('Washington', 'Oregon', 'California', 'Idaho', 'Nevada',
+               'Utah', 'Arizona', 'Montana', 'Wyoming', 'Colorado',
+               'New Mexico', 'North Dakota', 'South Dakota', 'Nebraska', 'Kansas',
+               'Oklahoma', 'Texas', 'Minnesota', 'Iowa', 'Missouri',
+               'Arkansas', 'Louisiana')
+
+western_sf <- 
+  # download a generalized (1:500k) states file
+  states(cb = TRUE) |> 
+  # set projection
+  st_transform("EPSG:5070") |> 
+  # standardize column names
+  clean_names() |> 
+  # filter data for Western states
+  filter(name %in% western_states) |>
+  # simplify spatial data
+  ms_simplify(keep = 0.2) 
+
+western_counties_sf <- 
+  # download a generalized (1:500k) counties file
+  counties(cb = TRUE) |>
+  # set projection
+  st_transform("EPSG:5070") |> 
+  # standardize column names
+  clean_names() |>  
+  # filter data for Western counties
+  filter(state_name %in% western_states) |> 
+  # simplify spatial data
+  ms_simplify(keep = 0.2)
+```
+
+```{r}
+font_legend <-"Source Sans Pro"
+font_add_google(font_legend)
+showtext_opts(dpi = 300, regular.wt = 200, bold.wt = 700)
+showtext_auto(enable = TRUE)
+
+map_change_plumbing <- function(data, year, var){
+  map_chloropleth_change <- 
+    data |>  #  load the census data 
+    ggplot(
+      aes(fill = {{var}}) # Set fill variable
+    ) +  
+    geom_sf(
+      color = "white", # Plot with white boundaries
+      linewidth = 0.05 # Set the width of the boundary lines
+    ) +  
+    geom_sf(
+      data = western_sf, # Add state boundaries for overlay
+      fill = NA, # No fill for this layer
+      color = "white",  # Set the boundary color to white
+      linewidth = 0.1, # Set the width of the boundary lines
+      linetype = "solid" # Use solid lines for the boundaries
+    ) +  
+    geom_sf(
+      data = western_counties_sf, # Add county boundaries for overlay
+      fill = NA, # No fill for this layer
+      color = "grey80", # Set the boundary line color to gray
+      linewidth = 0.09, # Set the width of the boundary lines
+      linetype = "solid" # Use solid lines for the boundaries
+    ) +  
+    theme_void() +  # Remove axis text and labels
+    theme(
+      text = element_text(family = font_legend, size = 16), # Custom font 
+      legend.margin = margin(t = 5, b = 2), # Set margins for the legend
+      legend.position = 'bottom', # Position the legend at the bottom
+      legend.title.align = 0.5 # Center-align the legend title
+    ) +  
+    guides(
+      fill = guide_colorbar( # Customize the color bar legend
+        title.position = "top",  # Position the title at the top
+        # Customize title text
+        title.theme = element_text(
+          face = 'bold',
+          family = font_legend,
+          size = 16
+        ), 
+        direction = "horizontal", # Orient the color bar horizontally
+        position = "bottom",  # Position the color bar at the bottom 
+        barwidth = 20, # Set the width of the color bar
+        barheight = 1) # Set the height of the color bar 
+    ) + 
+    scale_fill_scico(
+      name = sprintf("Households lacking plumbing (%s)", year), # Legend title
+      limits = c(0, 5), # Set the range of values for the fill scale
+      breaks = c(0, 1, 2, 3, 4, 5), # Set break points for the legend 
+      palette = "lajolla",  # Use the "lajolla" palette from `scico`
+      direction = -1, # Swap "lajolla" palette direction
+      end = 0.95, # Edit interval within palette to sample colors from
+      na.value="white", # Assign NA values as white
+      labels = function(x) paste0(x, "%"))  # Paste % labels on legend
+  
+  return(map_chloropleth_change) 
+}
+
+# View your maps
+map_change_plumbing(data = water_insecurity_2023, year = 2023, var=percent_lacking_plumbing)
+map_change_plumbing(data = water_insecurity_2022, year = 2022, var=percent_lacking_plumbing)
+```
+
+```{r}
+save(raw_data_2023, raw_data_2022, water_insecurity_2022, water_insecurity_2023, fulldata, file="water_insecurity.rdata")
+```

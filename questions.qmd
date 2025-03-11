@@ -1,0 +1,28 @@
+---
+title: "Research Questions"
+format: html
+---
+
+## Social Factors that Influence Water Insecurity
+
+- Metanalysis of several papers
+
+![](wrcr27409-fig-0006-m.jpg)
+
+## Research Questions
+
+1. What factors are the most correlated with water insecurity? 
+  - Financial Strength
+  - Economic Hardship and Inequality
+  - Educational Attainment
+2. Within Washington state, do the ADI numbers make sense?
+3. Was there a change in ADI from 2022 to 2023 - which state / county showed the largest change?
+4. Do any of the following factors correlate with water insecurity?
+  - age
+  - race/ethnicity
+  - family structure 
+  - gender 
+  - language proficiency), 
+  - dependence on specific sources and uses of water, 
+  - wealth
+  - exposure to water-related hazards.
