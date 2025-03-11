@@ -9,7 +9,7 @@ This data was first shown in Tidy Tuesday:
 
 More interesting reading:
 
-- [Mapping water insecureity in R with tidycensus](https://waterdata.usgs.gov/blog/acs-maps/) - the original blog post from which this data was derived.
+- [Mapping water insecurity in R with tidycensus](https://waterdata.usgs.gov/blog/acs-maps/) - the original blog post from which this data was derived.
 - [Unequal Access to Water: How societal factors shape vulnerability to water security](https://labs.waterdata.usgs.gov/visualizations/vulnerability-indicators/index.html#/en)
 - [Social Vulnerability and Water Security in the Western United States](https://agupubs.onlinelibrary.wiley.com/doi/epdf/10.1029/2023WR036284)
 - [sociome: Operationalizing Social Determinants of Health Data for Researchers](https://github.com/ClevelandClinicQHS/sociome) - package which calculates various indices
