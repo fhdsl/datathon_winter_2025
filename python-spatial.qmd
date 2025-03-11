@@ -2,12 +2,11 @@
 title: "Using Python"
 ---
 
-```{python, echo=F}
-!pip install geopandas
-!pip install mapclassify
-```
-
 We use the package `GeoPandas` to load in spatial data. Here is a [tutorial of GeoPandas](https://geopandas.org/en/stable/getting_started/introduction.html) to get started.
+
+You can run all of this in a [Google Colab notebook here](https://colab.research.google.com/drive/19h_tVo6hMJaV0u8gBDgKZbO2C8lUOwK9?usp=sharing).
+
+## Getting started with spatial data
 
 ```{python}
 import geopandas
@@ -18,16 +17,16 @@ gdf = geopandas.read_file("water_insecurity.geojson")
 
 The `gdf` variable is a `GeoDataFrame` data structure, which works just like a Pandas `DataFrame` data structure, except it has a `geometry` column that contains the spatial data corresponding to each county.
 
-Let's plot "percent_lacking_plumbing", overlaid with the spatial information:
+Let's plot the column "percent_lacking_plumbing", overlaid with the spatial information:
 
 ```{python}
-gdf.plot("percent_lacking_plumbing")
+gdf.plot("percent_lacking_plumbing", legend=True)
 ```
 
 Subset to Washington, year 2022:
 
 ```{python}
-wa2022 = gdf.loc[(gdf.state == " Washington") & (gdf.year == 2022)]
+wa2022 = gdf.loc[(gdf.state == "Washington") & (gdf.year == "2022")]
 
 wa2022.plot("percent_lacking_plumbing")
 ```
@@ -36,4 +35,16 @@ Interactive map plot:
 
 ```{python}
 wa2022.plot("percent_lacking_plumbing", legend=True)
+```
+
+## Variables used to calculate ADI
+
+If you are interested to access the variables that computed the [ADI score](https://datathon-winter-2025.netlify.app/about.html#adi-area-deprivation-index), you can access the dataframe and data dictionary here:
+
+```{python}
+adi_2022 = pd.read_csv("https://github.com/fhdsl/datathon_winter_2025/raw/refs/heads/main/area_deprivation_index_2022.csv")
+
+adi_2023 = pd.read_csv("https://github.com/fhdsl/datathon_winter_2025/raw/refs/heads/main/area_deprivation_index_2023.csv")
+
+data_dictionary = pd.read_csv("https://github.com/fhdsl/datathon_winter_2025/raw/refs/heads/main/raw_data_dictionary.csv")
 ```
