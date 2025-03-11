@@ -11,6 +11,7 @@ You can run all of this in a [Google Colab notebook here](https://colab.research
 ```{python}
 import geopandas
 import mapclassify
+import pandas as pd
 
 gdf = geopandas.read_file("water_insecurity.geojson")
 ```
