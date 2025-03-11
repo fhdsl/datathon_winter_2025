@@ -1,0 +1,39 @@
+---
+title: "Using Python"
+---
+
+```{python, echo=F}
+!pip install geopandas
+!pip install mapclassify
+```
+
+We use the package `GeoPandas` to load in spatial data. Here is a [tutorial of GeoPandas](https://geopandas.org/en/stable/getting_started/introduction.html) to get started.
+
+```{python}
+import geopandas
+import mapclassify
+
+gdf = geopandas.read_file("water_insecurity.geojson")
+```
+
+The `gdf` variable is a `GeoDataFrame` data structure, which works just like a Pandas `DataFrame` data structure, except it has a `geometry` column that contains the spatial data corresponding to each county.
+
+Let's plot "percent_lacking_plumbing", overlaid with the spatial information:
+
+```{python}
+gdf.plot("percent_lacking_plumbing")
+```
+
+Subset to Washington, year 2022:
+
+```{python}
+wa2022 = gdf.loc[(gdf.state == " Washington") & (gdf.year == 2022)]
+
+wa2022.plot("percent_lacking_plumbing")
+```
+
+Interactive map plot:
+
+```{python}
+wa2022.plot("percent_lacking_plumbing", legend=True)
+```
