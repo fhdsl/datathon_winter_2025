@@ -13,8 +13,8 @@ website:
         text: R Mapview
       - href: python-spatial.qmd
         text: Python
-      - href: datasette.qmd
-        text: SQL interface
+#      - href: datasette.qmd
+#        text: SQL interface
       - href: questions.qmd
         text: Research Questions
 
