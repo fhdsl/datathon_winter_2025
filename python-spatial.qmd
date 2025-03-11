@@ -34,7 +34,7 @@ wa2022.plot("percent_lacking_plumbing")
 Interactive map plot:
 
 ```{python}
-wa2022.plot("percent_lacking_plumbing", legend=True)
+wa2022.explore("percent_lacking_plumbing", legend=True)
 ```
 
 ## Variables used to calculate ADI
@@ -43,8 +43,6 @@ If you are interested to access the variables that computed the [ADI score](http
 
 ```{python}
 adi_2022 = pd.read_csv("https://github.com/fhdsl/datathon_winter_2025/raw/refs/heads/main/area_deprivation_index_2022.csv")
-
 adi_2023 = pd.read_csv("https://github.com/fhdsl/datathon_winter_2025/raw/refs/heads/main/area_deprivation_index_2023.csv")
-
 data_dictionary = pd.read_csv("https://github.com/fhdsl/datathon_winter_2025/raw/refs/heads/main/raw_data_dictionary.csv")
 ```
