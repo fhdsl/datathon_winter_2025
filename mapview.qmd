@@ -2,6 +2,15 @@
 title: "Using Mapview"
 ---
 
+The data is stored in `water_insecurity.rdata` in this folder. 
+
+It contains the following data frames
+
+- `fulldata` - both years (2022/2023) data as an `sf` `data.frame`
+- `water_insecurity_2022` and `water_insecurity_2023` - data split by year
+- `adi_2022` and `adi_2023` - Area deprivation index calculations split by year
+- `raw_data_2022` and `raw_data_2022` - the data from ACS that was used to derive the ADI.
+
 ```{r}
 library(mapview)
 library(leaflet)
@@ -9,8 +18,21 @@ library(plainview)
 library(leafsync)
 library(tidyverse)
 load("water_insecurity.rdata")
-mapview(fulldata)
+```
 
+```{r}
+head(fulldata)
+```
+
+We can use the `mapview` package to start exploring the dataset. We can view all rows of the data:
+
+```{r}
+mapview(fulldata)
+```
+
+We can filter by state:
+
+```{r}
 wa_counties <- fulldata |>
   dplyr::filter(state == "Washington") |>
   dplyr::filter(year == 2022)
